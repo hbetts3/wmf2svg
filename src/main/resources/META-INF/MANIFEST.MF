@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Main-Class: net.arnx.wmf2svg.Main
+Class-Path: android-4.1.1.4.jar batik-anim-1.12.jar batik-i18n-1.12.jar 
+ common-io-3.4.2.jar batik-parser-1.12.jar batik-svggen-1.12.jar common-
+ lang-3.4.2.jar common-image-3.4.2.jar imageio-core-3.4.2.jar imageio-ba
+ tik-3.4.2.jar batik-constants-1.12.jar batik-extension-1.12.jar batik-r
+ asterizer-1.12.jar batik-transcoder-1.12.jar imageio-metadata-3.4.2.jar
+  batik-svgrasterizer-1.12.jar batik-rasterizer-ext-1.12.jar appengine-a
+ pi-1.0-sdk-1.9.77.jar
+

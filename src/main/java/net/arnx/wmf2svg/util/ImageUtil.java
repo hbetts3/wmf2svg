@@ -1,23 +1,21 @@
 package net.arnx.wmf2svg.util;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
-import java.awt.image.DataBuffer;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesService.OutputEncoding;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
 
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.DataBuffer;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class ImageUtil {
 	private static Converter converter;
@@ -34,27 +32,27 @@ public class ImageUtil {
 			} catch (ClassNotFoundException e2) {
 				// no handle
 			}
-		}
-	}
+        }
+    }
 
-	public static byte[] convert(byte[] image, String destType, boolean reverse) {
-		if (converter == null) {
-			throw new UnsupportedOperationException("Image Conversion API(Image IO or GAE Image API) is missing.");
-		}
-		return converter.convert(image, destType, reverse);
-	}
+    public static byte[] convert(byte[] image, String destType, boolean reverse) {
+        if (converter == null) {
+            throw new UnsupportedOperationException("Image Conversion API(Image IO or GAE Image API) is missing.");
+        }
+        return converter.convert(image, destType, reverse);
+    }
 
-	private static interface Converter {
-		public byte[] convert(byte[] image, String destType, boolean reverse);
-	}
+    private interface Converter {
+        byte[] convert(byte[] image, String destType, boolean reverse);
+    }
 
-	private static class ImageIOConverter implements Converter {
-		public byte[] convert(byte[] image, String destType, boolean reverse) {
-			if (destType == null) {
-				throw new IllegalArgumentException("dest type is null.");
-			} else {
-				destType = destType.toLowerCase();
-			}
+    private static class ImageIOConverter implements Converter {
+        public byte[] convert(byte[] image, String destType, boolean reverse) {
+            if (destType == null) {
+                throw new IllegalArgumentException("dest type is null.");
+            } else {
+                destType = destType.toLowerCase();
+            }
 
 			byte[] outimage = null;
 			try {
@@ -91,23 +89,23 @@ public class ImageUtil {
 
 	private static class GAEConverter implements Converter {
 		public byte[] convert(byte[] image, String destType, boolean reverse) {
-			if (destType == null) {
-				throw new IllegalArgumentException("dest type is null.");
-			} else {
-				destType = destType.toLowerCase();
-			}
+            if (destType == null) {
+                throw new IllegalArgumentException("dest type is null.");
+            } else {
+                destType = destType.toLowerCase();
+            }
 
-			ImagesService.OutputEncoding encoding = null;
-			if ("png".equals(destType)) {
-				encoding = OutputEncoding.PNG;
-			} else if ("jpeg".equals(destType)) {
-				encoding = OutputEncoding.JPEG;
-			} else {
-				throw new UnsupportedOperationException("unsupported image encoding: " + destType);
-			}
+            ImagesService.OutputEncoding encoding;
+            if ("png".equals(destType)) {
+                encoding = OutputEncoding.PNG;
+            } else if ("jpeg".equals(destType)) {
+                encoding = OutputEncoding.JPEG;
+            } else {
+                throw new UnsupportedOperationException("unsupported image encoding: " + destType);
+            }
 
-			ImagesService imagesService = ImagesServiceFactory.getImagesService();
-			Image bmp = ImagesServiceFactory.makeImage(image);
+            ImagesService imagesService = ImagesServiceFactory.getImagesService();
+            Image bmp = ImagesServiceFactory.makeImage(image);
 
 			Transform t = (reverse) ? ImagesServiceFactory.makeVerticalFlip() : ImagesServiceFactory.makeCompositeTransform();
 			return imagesService.applyTransform(t, bmp, encoding).getImageData();
